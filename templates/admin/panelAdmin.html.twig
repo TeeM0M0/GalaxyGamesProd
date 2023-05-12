@@ -1,0 +1,132 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}
+	{{parent()}}Panneau d'administration
+{% endblock %}
+
+{% block body %}
+
+	
+
+	<div class="container-fluid px-0">
+		<div class="row">
+			<nav id="sidebarMenu" class="col-md-3 col-lg-2 d-block bg-body-tertiary sidebar collapse">
+				<div class="position-sticky pt-3 sidebar-sticky">
+					<h6 class="sidebar-heading d-flex justify-content-between align-items-center px-3 mt-4 mb-1 text-body-secondary text-uppercase">
+						<span>GESTION SITE</span>
+						<a class="link-secondary" href="#" aria-label="Add a new report">
+							<span data-feather="plus-circle" class="align-text-bottom"></span>
+						</a>
+					</h6>
+					<ul class="nav flex-column">
+						<li class="nav-item">
+							<a class="nav-link" aria-current="page" href="{{path('listeutilisateur')}}">
+								<span data-feather="home" class="align-text-bottom"></span>
+								Liste des utilisateurs
+							</a>
+						</li>
+						<li class="nav-item">
+							<a class="nav-link" href="{{path('listecommande')}}">
+								<span data-feather="file" class="align-text-bottom"></span>
+								Liste des commandes
+							</a>
+						</li>
+						<li class="nav-item">
+							<a class="nav-link" href="{{path('listemessage')}}">
+								<span data-feather="file" class="align-text-bottom"></span>
+								Message support
+							</a>
+						</li>
+
+					</ul>
+
+					<h6 class="sidebar-heading d-flex justify-content-between align-items-center px-3 mt-4 mb-1 text-body-secondary text-uppercase">
+						<span>ARTICLE</span>
+						<a class="link-secondary" href="#" aria-label="Add a new report">
+							<span data-feather="plus-circle" class="align-text-bottom"></span>
+						</a>
+					</h6>
+					<ul class="nav flex-column">
+						<li class="nav-item">
+							<a class="nav-link active" aria-current="page" href="{{path('ajout-article')}}">
+								<span data-feather="home" class="align-text-bottom"></span>
+								Ajouter un article
+							</a>
+						</li>
+						<li class="nav-item">
+							<a class="nav-link" href="{{path('listeArticles')}}">
+								<span data-feather="file" class="align-text-bottom"></span>
+								Liste des articles
+							</a>
+						</li>
+						<li class="nav-item">
+							<a class="nav-link" href="{{path('ajoutgenre')}}">
+								<span data-feather="file" class="align-text-bottom"></span>
+								Ajouter un genre
+							</a>
+						</li>
+						<li class="nav-item">
+							<a class="nav-link" href="{{path('ajoutlangue')}}">
+								<span data-feather="file" class="align-text-bottom"></span>
+								Ajouter une langue
+							</a>
+						</li>
+						<li class="nav-item">
+							<a class="nav-link" href="{{path('ajoutplateforme')}}">
+								<span data-feather="file" class="align-text-bottom"></span>
+								Ajouter une plateforme
+							</a>
+						</li>
+					</ul>
+
+					<h6 class="sidebar-heading d-flex justify-content-between align-items-center px-3 mt-4 mb-1 text-body-secondary text-uppercase">
+						<span>MODIFICATION PAGE PRINCIPAL</span>
+						<a class="link-secondary" href="#" aria-label="Add a new report">
+							<span data-feather="plus-circle" class="align-text-bottom"></span>
+						</a>
+					</h6>
+					<ul class="nav flex-column mb-2">
+						<li class="nav-item">
+							<a class="nav-link" href="{{path('ajout-imgcarousel')}}">
+								<span data-feather="file-text" class="align-text-bottom"></span>
+								Carousel principal
+							</a>
+						</li>
+						<li class="nav-item">
+							<a class="nav-link" href="{{path('ajout-imgcarousellicence')}}">
+								<span data-feather="file-text" class="align-text-bottom"></span>
+								Carousel licences
+							</a>
+						</li>
+						<li class="nav-item">
+							<a class="nav-link" href="{{path('ajout-imgcarouselcollector')}}">
+								<span data-feather="file-text" class="align-text-bottom"></span>
+								Carousel vinyles
+							</a>
+						</li>
+					</ul>
+				</div>
+			</nav>
+			<main class="d-none d-md-block col-md-9 ms-sm-auto col-lg-10 px-md-4">
+				<h1 class="text-center text-info mt-4 pt-4 display-1 fw-bold">Panneau d'administration</h1>
+				<div class="row justify-content-evenly mt-5">
+					<div class=" col-4 text-start">
+						<h3 class="py-5">Nombre total d'utilisateurs : {{ totalUsers }}
+						</h3>
+						<h3 class="py-5">Recette totale : {{ recettes }} EURO
+						</h3>
+					</div>
+					<div class=" col-4 text-start">
+						<h3 class="py-5">Nombre total de commandes  : {{ commandes|length }}
+						</h3>
+						<h3 class="py-5">Nombre de message de support :  {{ totalContact }}
+						</h3>
+					</div>
+				</div>
+			</main>
+		</div>
+	</div>
+
+
+{% endblock %}
+

@@ -1,0 +1,56 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}
+	{{parent()}}Liste-Articles
+{% endblock %}
+
+{% block body %}
+	<h1 class="text-center text-info mt-4 pt-4 display-1 fw-bold">Liste des articles</h1>
+
+	<div class="row justify-content-center">
+		<div class="col-12 col-md-8 bg-white p-4 m-0 text-primary">
+			<div class="table-responsive">
+				<table class="table table-hover table align-middle">
+					<thead>
+						<tr class="fw-bold text-info text-center">
+                            <th scope="col"></th>
+							<th scope="col">Article</th>
+							<th scope="col">Prix</th>
+                            <th scope="col">Quantité en stock</th>
+                            <th scope="col">Quantité vendu</th>
+                            <th scope="col">Prix total vendu</th>
+                            <th scope="col">Modifier l'article</th>
+                            <th scope="col">Supprimer l'article</th>
+						</tr>
+					</thead>
+					<tbody>
+						{% for a in articles %}
+							<tr
+								class="{{ cycle(['table-primary', 'table-secondary'], loop.index0) }} text-center">
+								<td>
+                                    {% set url = 'images/articles/'~a.imageArticles[0].nom %} 
+								    <img src="{{asset(url)}}" class="me-3  rounded-5" style="max-width: 100; height: auto; object-fit: contain;"><img/>
+                                </td>
+                                <td>{{a.libelle}}</td>
+                                <td>{{a.prix}} EURO</td>
+                                <td>{{a.qteStock}}</td>
+                                <td>{{a.qteVendu}}</td>
+                                <td>{{a.prix * a.qteVendu}}</td>
+								<td class="">
+									<a href="{{path('modifarticle',{'id':a.id})}}">
+										<i class="bi bi-pencil-square"></i>
+									</a>
+								</td>
+                                <td class="">
+									<a href="{{path('supp-article',{'id':a.id})}}">
+										<i class="bi bi-x-circle"></i>
+									</a>
+								</td>
+							</tr>
+						{% endfor %}
+					</tbody>
+				</table>
+			</div>
+		</div>
+	</div>
+</div>{% endblock %}

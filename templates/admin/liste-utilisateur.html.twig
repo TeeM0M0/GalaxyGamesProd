@@ -1,0 +1,51 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}
+	{{parent()}}Liste des utilisateurs
+{% endblock %}
+
+{% block body %}
+	<h1 class="text-center text-info mt-4 pt-4 display-1 fw-bold">Liste des utilisateurs</h1>
+
+	<div class="row justify-content-center">
+		<div class="col-12 col-md-8 bg-white p-4 m-0 text-primary">
+			<div class="table-responsive">
+				<table class="table table-hover table align-middle">
+					<thead>
+						<tr class="fw-bold text-info text-center">
+							<th scope="col">Email</th>
+							<th scope="col">Role</th>
+							<th scope="col">Est vérifier</th>
+							<th scope="col">Supprimer l'utilisateur</th>
+						</tr>
+					</thead>
+					<tbody>
+						{% for u in utilisateurs %}
+							<tr class="{{ cycle(['table-primary', 'table-secondary'], loop.index0) }} text-center">
+								<td>{{u.email}}</td>
+								{% if "ROLE_ADMIN" in u.roles %}
+									<td>Administrateur</td>
+								{% elseif "ROLE_MOD" in u.roles  %}
+									<td>Modérateur</td>
+								{% else %}
+									<td>utilisateur</td>
+								{% endif %}
+								{% if u.isVerified == 1 %}
+									<td>Oui</td>
+								{% else %}
+									<td>Non</td>
+								{% endif %}
+								<td class="">
+									<a href="{{path('supputilisateur',{'id':u.id})}}">
+										<i class="bi bi-x-circle"></i>
+									</a>
+								</td>
+							</tr>
+						{% endfor %}
+					</tbody>
+				</table>
+			</div>
+		</div>
+	</div>
+</div>{% endblock %}
+

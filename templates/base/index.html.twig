@@ -1,0 +1,597 @@
+{% extends 'base.html.twig' %}
+
+
+{% block title %}Accueil
+{% endblock %}
+
+{% block body %}
+
+	<div class="">
+		{% set start = 1 %}
+		{% set end = (carousel|length)-1 %}
+		{% set url1 = 'images/carousel/'~carousel[0].nomImage %}
+		<div id="carousel" class="carousel slide mt-5" data-bs-ride="carousel">
+			<div class="carousel-inner">
+				<div class="carousel-item active" data-bs-interval="10000">
+						<img src="{{asset(url1)}}" class="d-block w-100"><img/>
+					</div>
+				{% for i in start..end %}
+					<div class="carousel-item" data-bs-interval="10000">
+						{% set url = 'images/carousel/'~carousel[i].nomImage %}
+						<img src="{{asset(url)}}" class="d-block w-100"><img/>
+					</div>
+				{% endfor %}
+			</div>
+			<button class="carousel-control-prev" type="button" data-bs-target="#carousel" data-bs-slide="prev">
+				<span class="carousel-control-prev-icon" aria-hidden="true"></span>
+				<span class="visually-hidden">Previous</span>
+			</button>
+			<button class="carousel-control-next" type="button" data-bs-target="#carousel" data-bs-slide="next">
+				<span class="carousel-control-next-icon" aria-hidden="true"></span>
+				<span class="visually-hidden">Next</span>
+			</button>
+		</div>
+
+		<div class="d-none d-md-block col text-center mt-3">
+			<div class="d-flex row">
+				<p class="justify-content-center text-uppercase fw-bold fs-3 p-0">
+					Bienvenue sur la Boutique officielle<span class="text-info ms-2 ">GalaxyGames</span>
+				</p>
+				</div>
+			<div class="row d-flex justify-content-center fs-5">
+				<p class="p-0">Votre site de vente en ligne de
+					<span class=" fw-bold">Jeux Vidéo, Exclusivités & Collectors, BO Vinyles, Bornes d'Arcade, Consoles et Accessoires Rétrogaming</span>
+					!</p>
+			</div>
+		</div>
+		
+		<div class="container-fluid d-block col d-md-none text-center mt-3">
+			<div class="d-flex row">
+				<p class="justify-content-center text-uppercase fw-bold fs-3 p-0">
+					Bienvenue sur la Boutique officielle<span class="text-info ms-2 ">GalaxyGames</span>
+				</p>
+			</div>
+			<div class="d-flex row">
+				<p class="justify-content-center fs-6 p-0">
+					Votre site de vente en ligne de
+					<span class=" fw-bold">Jeux Vidéo, Exclusivités & Collectors, BO Vinyles, Bornes d'Arcade, Consoles et Accessoires Rétrogaming</span>
+				</p>
+			</div>
+		</div>
+		
+
+
+		<div class="d-none d-md-flex justify-content-center mt-5">
+			<button onclick="showDiv('nouveau')" id="nouveaub" class="btn_choix mx-5 bg-white fw-bold text-uppercase fs-5  text-black border-5 border-bottom border-info border-0">nouveautés</button>
+			<button onclick="showDiv('best_vente')" id="best_venteb" class="btn_choix mx-5 fw-bold text-uppercase fs-5 bg-white  border-5 border-bottom border-white border-0">meilleurs ventes</button>
+			<button onclick="showDiv('precommande')" id="precommandeb" class="btn_choix mx-5 fw-bold text-uppercase fs-5 bg-white border-5 border-bottom border-white border-0">précommandes</button>
+		</div>
+
+		<div class="container-fluid row d-block d-md-none justify-content-center mt-5 mx-0">
+			<button onclick="showDiv('nouveau')" id="nouveaub" class="col mb-3 btn_choix mx-0 p-0 bg-white fw-bold text-uppercase fs-5  text-black border-5 border-bottom border-info border-0">nouveautés</button>
+			<button onclick="showDiv('best_vente')" id="best_venteb" class="col mb-3 btn_choix mx-0 p-0 fw-bold text-uppercase fs-5 bg-white  border-5 border-bottom border-white border-0">meilleurs ventes</button>
+			<button onclick="showDiv('precommande')" id="precommandeb" class="col mb-3 btn_choix mx-0 p-0 fw-bold text-uppercase fs-5 bg-white border-5 border-bottom border-white border-0">précommandes</button>
+		</div>
+
+		<!-- faire un menu pour les jeu avec les div qui dépop -->
+
+		<div id="nouveau" class="d-flex mt-5 choix">
+			<div class="row mx-auto ">
+				{% for a in articles|slice(0, 5) %}
+					{% set interval = date(a.dateSortie).diff(date(date)) %}
+					{% set leftDays = interval.days %}
+					{% if leftDays < 31 and date > a.dateSortie %}
+						<div class="col p-0 mx-md-4">
+							<a class="text-decoration-none text-secondary" href="{{path('article',{'id':a.id})}}">
+								<div class="container d-flex text-center p-0"style="width:320px; height:552px;">
+
+									<div class="card border-0 rounded-0 mx-0" style="width:320px; height:552px;">
+										<div class="item">
+											{% set url = 'images/articles/'~a.imageArticles[0].nom %}
+											<span class="notify-badge-new">Nouveauté</span>
+											<img src="{{asset(url)}}" class="img-fluid" style="width:auto; height:323px;"></div>
+										<div>
+											<h3 class="text-uppercase text-center" style="width:auto; height:67.19px;">{{a.libelle}}</h3>
+										</div>
+										<div>
+											<span>{{a.prix}}
+												EURO</span>
+										</div>
+										<div>
+											<span>
+												<a href="{{path('modifpanier',{'id':a.id,'action':'ajouter','page':'cataloguePCn'})}}" class="btn btn-info border-0 rounded-5 mt-2">Acheter</a>
+											</span>
+										</div>
+										<hr class="opacity-100 me-2 border-info" style=" border-top-width: 3px; ">
+									</div>
+								</div>
+							</a>
+						</div>
+					{% endif %}
+				{% endfor %}
+			</div>
+		</div>
+
+		<div id="precommande" class="d-none mt-5 choix">
+			<div class="row mx-auto ">
+				{% for a in articles|slice(0, 5) %}
+					{% if date|date('U') <  a.dateSortie|date('U') %}
+						<div class="col p-0 mx-md-4">
+							<a class="text-decoration-none text-secondary" href="{{path('article',{'id':a.id})}}">
+								<div class="container d-flex text-center p-0"style="width:320px; height:552px;">
+
+									<div class="card border-0 rounded-0 mx-0" style="width:320px; height:552px;">
+										<div class="item">
+											{% set url = 'images/articles/'~a.imageArticles[0].nom %}
+											<span class="notify-badge-preco">Pré-commande</span>
+											<img src="{{asset(url)}}" class="img-fluid" style="width:auto; height:323px;"></div>
+										<div>
+											<h3 class="text-uppercase text-center" style="width:auto; height:67.19px;">{{a.libelle}}</h3>
+										</div>
+										<div>
+											<span>{{a.prix}}
+												EURO</span>
+										</div>
+										<div>
+											<span>
+												<a href="{{path('modifpanier',{'id':a.id,'action':'ajouter','page':'cataloguePCn'})}}" class="btn btn-info border-0 rounded-5 mt-2">Acheter</a>
+											</span>
+										</div>
+										<hr class="opacity-100 me-2 border-info" style=" border-top-width: 3px; ">
+									</div>
+								</div>
+							</a>
+						</div>
+					{% endif %}
+				{% endfor %}
+			</div>
+		</div>
+
+		<div id="best_vente" class="d-none mt-5 choix">
+			{% set articlesPlusVendus = articles|filter(a => a.qteVendu >= 100)|sort((a, b) => b.qteVendu - a.qteVendu) %}
+			<div class="row mx-auto ">
+				{% for a in articlesPlusVendus|slice(0, 5) %}
+					{% set interval = date(a.dateSortie).diff(date(date)) %}
+					{% set leftDays = interval.days %}
+					{% if leftDays < 31 and date > a.dateSortie %}
+						<div class="col p-0 mx-md-4">
+							<a class="text-decoration-none text-secondary" href="{{path('article',{'id':a.id})}}">
+								<div class="container d-flex text-center p-0"style="width:320px; height:552px;">
+
+									<div class="card border-0 rounded-0 mx-0" style="width:320px; height:552px;">
+										<div class="item">
+											{% set url = 'images/articles/'~a.imageArticles[0].nom %}
+											<span class="notify-badge-new">Nouveauté</span>
+											<img src="{{asset(url)}}" class="img-fluid" style="width:auto; height:323px;"></div>
+										<div>
+											<h3 class="text-uppercase text-center" style="width:auto; height:67.19px;">{{a.libelle}}</h3>
+										</div>
+										<div>
+											<span>{{a.prix}}
+												EURO</span>
+										</div>
+										<div>
+											<span>
+												<a href="{{path('modifpanier',{'id':a.id,'action':'ajouter','page':'cataloguePCn'})}}" class="btn btn-info border-0 rounded-5 mt-2">Acheter</a>
+											</span>
+										</div>
+										<hr class="opacity-100 me-2 border-info" style=" border-top-width: 3px; ">
+									</div>
+								</div>
+							</a>
+						</div>
+					{% elseif date|date('U') <  a.dateSortie|date('U') %}
+						<div class="col p-0 mx-md-4">
+							<a class="text-decoration-none text-secondary" href="{{path('article',{'id':a.id})}}">
+								<div class="container d-flex text-center p-0"style="width:320px; height:552px;">
+
+									<div class="card border-0 rounded-0 mx-0" style="width:320px; height:552px;">
+										<div class="item">
+											{% set url = 'images/articles/'~a.imageArticles[0].nom %}
+											<span class="notify-badge-preco">Pré-commande</span>
+											<img src="{{asset(url)}}" class="img-fluid" style="width:auto; height:323px;"></div>
+										<div>
+											<h3 class="text-uppercase text-center" style="width:auto; height:67.19px;">{{a.libelle}}</h3>
+										</div>
+										<div>
+											<span>{{a.prix}}
+												EURO</span>
+										</div>
+										<div>
+											<span>
+												<a href="{{path('modifpanier',{'id':a.id,'action':'ajouter','page':'cataloguePCn'})}}" class="btn btn-info border-0 rounded-5 mt-2">Acheter</a>
+											</span>
+										</div>
+										<hr class="opacity-100 me-2 border-info" style=" border-top-width: 3px; ">
+									</div>
+								</div>
+							</a>
+						</div>
+					{% else %}
+						<div class="col p-0 mx-md-4">
+							<a class="text-decoration-none text-secondary" href="{{path('article',{'id':a.id})}}">
+								<div class="container d-flex text-center p-0"style="width:320px; height:552px;">
+
+									<div class="card border-0 rounded-0 mx-0" style="width:320px; height:552px;">
+										<div class="item">
+											{% set url = 'images/articles/'~a.imageArticles[0].nom %}
+											<img src="{{asset(url)}}" class="img-fluid" style="width:auto; height:323px;"></div>
+										<div>
+											<h3 class="text-uppercase text-center" style="width:auto; height:67.19px;">{{a.libelle}}</h3>
+										</div>
+										<div>
+											<span>{{a.prix}}
+												EURO</span>
+										</div>
+										<div>
+											<span>
+												<a href="{{path('modifpanier',{'id':a.id,'action':'ajouter','page':'cataloguePCn'})}}" class="btn btn-info border-0 rounded-5 mt-2">Acheter</a>
+											</span>
+										</div>
+										<hr class="opacity-100 me-2 border-info" style=" border-top-width: 3px; ">
+									</div>
+								</div>
+							</a>
+						</div>
+					{% endif %}
+				{% endfor %}
+			</div>
+		</div>
+
+		<script>
+			function showDiv(divId) {
+var divs = document.getElementsByClassName('choix');
+var btn = document.getElementsByClassName('btn_choix');
+for (var i = 0; i < divs.length; i++) {
+if (divs[i].id === divId) {
+divs[i].classList.add('d-flex');
+divs[i].classList.remove('d-none');
+} else {
+divs[i].classList.add('d-none');
+divs[i].classList.remove('d-flex');
+}
+}
+for (var i = 0; i < btn.length; i++) {
+if (btn[i].id === divId + "b") {
+btn[i].classList.add('border-info');
+btn[i].classList.remove('border-white');
+} else {
+btn[i].classList.add('border-white');
+btn[i].classList.remove('border-info');
+}
+}
+}
+		</script>
+
+		<!-- carousel licence -->
+		<div class="d-flex m-3"><hr class=" opacity-100 me-2" style="width:40px; border-top-width: 3px; border-top-color: rgba(0, 84, 162, 1);"><h2 class="fw-bold">Nos licences Jeux Vidéos</h2>
+		</div>
+
+		<style>
+			@media(max-width: 767px) {
+				.ci2 .ca2 > div {
+					display: none;
+				}
+
+				.ci2 .ca2>div:first-child {
+					display: block;
+				}
+			}
+
+			.ci2 .carousel-item.active,
+			.ci2 .carousel-item-next,
+			.ci2 .carousel-item-prev {
+				display: flex;
+			}
+
+			/* medium and up screens */
+			@media(min-width: 768px) {
+
+				.ci2 .carousel-item-end.active,
+				.ci2 .carousel-item-next {
+					transform: translateX(25%);
+				}
+
+				.ci2 .carousel-item-start.active,
+				.ci2 .carousel-item-prev {
+					transform: translateX(-25%);
+				}
+			}
+
+			.ci2 .carousel-item-end,
+			.ci2 .carousel-item-start {
+				transform: translateX(0);
+			}
+		</style>
+
+		<div class="d-none d-md-block container-fluid text-center my-3">
+			<div class="row mx-auto my-auto justify-content-center">
+				<div id="recipeCarousel" class="carousel carousel-dark slide" data-bs-ride="carousel">
+					<div class="carousel-inner ci2" role="listbox">
+						{% set deb = 1 %}
+						{% set fin = (carouselLicence|length)-1 %}
+						{% set photo1 = 'images/carousel-licence/'~carouselLicence[0].nomImage %}
+						<div class="carousel-item active ca2">
+							<div class="col-sm-6 col-md-4 col-lg-3">
+								<div class="card border-0">
+									<div class="card-img">
+										<img src="{{asset(photo1)}}" class="img-fluid rounded-5"><img/>
+									</div>
+								</div>
+							</div>
+						</div>
+						{% for  y in deb..fin %}
+							<div class="carousel-item ca2">
+								<div class="col-sm-6 col-md-4 col-lg-3">
+									<div class="card border-0">
+										<div class="card-img">
+											{% set url = 'images/carousel-licence/'~carouselLicence[y].nomImage %}
+											<img src="{{asset(url)}}" class="img-fluid rounded-5"><img/>
+										</div>
+									</div>
+								</div>
+							</div>
+						{% endfor %}
+					</div>
+					<a class="carousel-control-prev bg-transparent w-auto text-decoration-none text-black" href="#recipeCarousel" role="button" data-bs-slide="prev">
+						<span class="carousel-control-prev-icon" aria-hidden="true"></span>
+						<span class="visually-hidden">Previous</span>
+					</a>
+					<a class="carousel-control-next bg-transparent w-auto text-decoration-none" href="#recipeCarousel" role="button" data-bs-slide="next">
+						<span class="carousel-control-next-icon" aria-hidden="true"></span>
+						<span class="visually-hidden">Next</span>
+					</a>
+				</div>
+			</div>
+		</div>
+
+		<div class="d-block d-md-none container-fluid text-center my-3">
+			<div id="carouselExampleAutoplaying" class="carousel slide" data-bs-ride="carousel">
+				<div class="carousel-inner">
+					{% set deb = 1 %}
+						{% set fin = (carouselLicence|length)-1 %}
+						{% set photo1 = 'images/carousel-licence/'~carouselLicence[0].nomImage %}
+						<div class="carousel-item active">
+							<div class="col-sm-6 col-md-4 col-lg-3">
+								<div class="card border-0">
+									<div class="card-img">
+										<img src="{{asset(photo1)}}" class="img-fluid rounded-5"><img/>
+									</div>
+								</div>
+							</div>
+						</div>
+						{% for  y in deb..fin %}
+							<div class="carousel-item">
+								<div class="col-sm-6 col-md-4 col-lg-3">
+									<div class="card border-0">
+										<div class="card-img">
+											{% set url = 'images/carousel-licence/'~carouselLicence[y].nomImage %}
+											<img src="{{asset(url)}}" class="img-fluid rounded-5"><img/>
+										</div>
+									</div>
+								</div>
+							</div>
+						{% endfor %}
+				</div>
+				<button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleAutoplaying" data-bs-slide="prev">
+					<span class="carousel-control-prev-icon" aria-hidden="true"></span>
+					<span class="visually-hidden">Previous</span>
+				</button>
+				<button class="carousel-control-next" type="button" data-bs-target="#carouselExampleAutoplaying" data-bs-slide="next">
+					<span class="carousel-control-next-icon" aria-hidden="true"></span>
+					<span class="visually-hidden">Next</span>
+				</button>
+			</div>
+		</div>
+
+
+		<script>
+			let items = document.querySelectorAll('.ca2')
+items.forEach((el) => {
+const minPerSlide = 4
+let next = el.nextElementSibling
+for (var i = 1; i < minPerSlide; i++) {
+if (! next) {
+next = items[0]
+}
+let cloneChild = next.cloneNode(true)
+el.appendChild(cloneChild.children[0])
+next = next.nextElementSibling
+}
+})
+		</script>
+		<!-- carousel licence -->
+
+		<div class="d-flex mt-5 m-3"><hr class=" opacity-100 me-2" style="width:40px; border-top-width: 3px; border-top-color: rgba(0, 84, 162, 1);"><h2 class="fw-bold">
+				Les jeux, vinyles et collectors à la une</h2>
+		</div>
+		<div class="d-none d-md-block container-fluid">
+			{% set start = 3 %}
+			{% set end = (carouselCollector|length)-1 %}
+			{% set url1 = 'images/carousel-collector/'~carouselCollector[0].nomImage %}
+			{% set url2 = 'images/carousel-collector/'~carouselCollector[1].nomImage %}
+			{% set url3 = 'images/carousel-collector/'~carouselCollector[2].nomImage %}
+			<div class="row">
+				<div class="col-4">
+					<div class="row">
+						<div class="position-relative">
+							<img src="{{ asset(url1) }}" class="img-fluid" alt="...">
+							<button class="btn rounded-5 fw-bold text-white border-0 position-absolute top-50 start-50 translate-middle" style="background-color: rgba(23, 162, 184, 0.8);">{{ carouselCollector[0].nomJeu }}</button>
+						</div>
+					</div>
+					<div class="row">
+						<div class="position-relative">
+							<img src="{{ asset(url2) }}" class="img-fluid mt-4" alt="...">
+							<button class="btn text-white fw-bold rounded-5 border-0 position-absolute top-50 start-50 translate-middle" style="background-color: rgba(23, 162, 184, 0.8);">{{ carouselCollector[1].nomJeu }}</button>
+						</div>
+					</div>
+				</div>
+				<div class="col-8">
+					<div class="container">
+						<div id="carouselcollector" class="carousel slide " data-bs-ride="carousel">
+							<div class="carousel-inner ">
+								<div class="carousel-item active">
+									<img src="{{asset(url3)}}" class="img-fluid d-block"  alt="...">
+								</div>
+								{% for  i in start..end %}
+									{% set url = 'images/carousel-collector/'~carouselCollector[i].nomImage %}
+									<div class="carousel-item">
+										<img src="{{asset(url)}}" class="img-fluid d-block" alt="...">
+									</div>
+								{% endfor %}
+							</div>
+							<button class="carousel-control-prev" type="button" data-bs-target="#carouselcollector" data-bs-slide="prev">
+								<span class="carousel-control-prev-icon" aria-hidden="true"></span>
+								<span class="visually-hidden">Previous</span>
+							</button>
+							<button class="carousel-control-next" type="button" data-bs-target="#carouselcollector" data-bs-slide="next">
+								<span class="carousel-control-next-icon" aria-hidden="true"></span>
+								<span class="visually-hidden">Next</span>
+							</button>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+
+		<div class="d-flex d-md-none container-fluid">
+			{% set start = 1 %}
+			{% set end = (carouselCollector|length)-1 %}
+			{% set url1 = 'images/carousel-collector/'~carouselCollector[0].nomImage %}
+			<div class="row">
+				<div class="col">
+					<div class="container">
+						<div id="carouselcollector2" class="carousel slide " data-bs-ride="carousel">
+							<div class="carousel-inner ">
+								<div class="carousel-item active">
+									<img src="{{asset(url1)}}" class="img-fluid rounded-4"  alt="..." style="height:157px;">
+								</div>
+								{% for  i in start..end %}
+									{% set url = 'images/carousel-collector/'~carouselCollector[i].nomImage %}
+									<div class="carousel-item">
+										<img src="{{asset(url)}}" class="img-fluid rounded-4" alt="..." style="height:157px;">
+									</div>
+								{% endfor %}
+							</div>
+							<button class="carousel-control-prev" type="button" data-bs-target="#carouselcollector2" data-bs-slide="prev">
+								<span class="carousel-control-prev-icon" aria-hidden="true"></span>
+								<span class="visually-hidden">Previous</span>
+							</button>
+							<button class="carousel-control-next" type="button" data-bs-target="#carouselcollector2" data-bs-slide="next">
+								<span class="carousel-control-next-icon" aria-hidden="true"></span>
+								<span class="visually-hidden">Next</span>
+							</button>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+
+		<div class="bg-info pb-5 pt-2 mt-5">
+			<div class="d-none d-md-flex justify-content-center mt-5">
+				<button onclick="showDivInfo('valeur')" id="valeurb" class="btn_info mx-5 text-white bg-info fw-bold text-uppercase fs-5  text-black border-5 border-bottom border-white border-0">Nos valeurs</button>
+				<button onclick="showDivInfo('catalogue')" id="catalogueb" class="btn_info mx-5 text-white fw-bold text-uppercase fs-5 bg-info  border-5 border-bottom border-info border-0">Notre catalogue</button>
+				<button onclick="showDivInfo('expertise')" id="expertiseb" class="btn_info mx-5 text-white fw-bold text-uppercase fs-5 bg-info border-5 border-bottom border-info border-0">Nos expertises</button>
+			</div>
+			<div class="container-fluid row d-block d-md-none justify-content-center mt-5 mx-0">
+				<button onclick="showDivInfo('valeur')" id="valeurb" class="col mb-3 btn_info mx-0 p-0 text-white bg-info fw-bold text-uppercase fs-5  text-black border-5 border-bottom border-white border-0">Nos valeurs</button>
+				<button onclick="showDivInfo('catalogue')" id="catalogueb" class="col mb-3 btn_info mx-0 p-0 text-white fw-bold text-uppercase fs-5 bg-info  border-5 border-bottom border-info border-0">Notre catalogue</button>
+				<button onclick="showDivInfo('expertise')" id="expertiseb" class="col mb-3 btn_info mx-0 p-0 text-white fw-bold text-uppercase fs-5 bg-info border-5 border-bottom border-info border-0">Nos expertises</button>
+			</div>
+
+			<div id="valeur" class="info d-none container text-center mt-5 text-white">
+				<div class="col justify-content-center" style="text-justify: auto;">
+					<div class="fs-3 mb-3 fw-bold">GALAXYGAMES, DES CONVICTIONS PARTAGÉES AVEC SES CLIENTS</div>
+					<div class="text-center fs-5">
+						Depuis 2011, GalaxyGames est devenu
+						<strong>acteur incontournable de l'édition et la distribution de jeux vidéo</strong>
+						en France et en Europe. Une équipe à taille humaine, proche de la communauté gaming,
+						<strong>sélectionne 
+												des produits avec passion et conviction</strong>
+						et reste à l'affût d'éditions physiques des meilleurs jeux développé 
+											par les meilleurs studios du monde. Un goût du risque et un "French flair" assumés pour
+						<strong>dénicher en 
+												exclusivité des pépites "indies", "néo-rétro", d'obscurs RPG ou même des "import" coup de coeur</strong>, des
+												jeux parfois très éloignés des jeux "mainstream" des éditeurs grand public, mais qui font maintenant partie
+												intégrante de la scène créatrice et d'un média élevé au rang d'art.
+						<strong>Une stratégie éditoriale souvent 
+												audacieuse et toujours indépendante qui fait partie de nos atouts majeurs et de notre ADN, tout en 
+												veillant à conserver un large choix de gammes et de styles qui satisferont le plus grand nombre</strong>.
+					</div>
+				</div>
+			</div>
+
+			<div id="catalogue" class="info d-none container text-center mt-5 text-white">
+				<div class="col justify-content-center" style="text-justify: auto;">
+					<div class="fs-3 mb-3 fw-bold">UNE GRANDE SELECTION DE JEUX AUX MEILLEURS PRIX, RIEN QUE POUR VOUS !</div>
+					<div class="text-center fs-5">
+						GalaxyGames est le fier représentant francophone d'éditeurs internationaux majeurs tels que
+						<strong>Team 17, Fan 
+												Gamer, Maximum Games, Iam8bit, Skybound Games, Merge Games, Inin Games, PQube, PixelHeart, 
+												Marvelous</strong>, etc… Ces partenariats nous permettent de vous proposer à des prix ultra-compétitifs des jeux de 
+												styles et horizons divers, des "Party Games" familiaux et casual à la portée de tous, aussi bien que les 
+												"Roguelike" ou les "Die & Retry" favoris des gamers les plus assidus !
+						<strong>GalaxyGames met à votre disposition 
+												un des plus grands et qualitatifs catalogues de jeux physiques sur Nintendo Switch, Playstation 5 ou 
+												PS4, Xbox Séries X ou Xbox One, PC ou même de nouveaux supports émergents comme la nouvelle 
+												console rétro Evercade</strong>. Des jeux indépendants comme Dead Cells, Wonder Boy, Spiritfarer, Gris, Okinawa 
+												Rush, Streets Of Rage 4, Hollow Knight ou Ori. Des jeux grand public comme Story Of Seasons, LOL Surprise, 
+												Alex Kidd, Worms, Overcooked, Among Us, Instant Sports, Kitaria, Horse Club, Nerf Legends ou la gamme 
+												Nickelodeon. De la simulation et de la stratégie avec Bus Simulator, Jurassic World, Truck Driver, Flight 
+												Simulator, Planet Coaster, Farming Simulator, X-Plane, ou Euro Truck. Mais aussi certains des blockbusters les 
+												plus appréciés par les gamers comme Biomutant, Godfall, Sniper Ghost Warrior Contracts, Zombie Army, 
+												Danganronpa, Walking Dead, Tormented Souls, Alan Wake ou même Fortnite !!
+					</div>
+				</div>
+			</div>
+
+			<div id="expertise" class="info d-flex container text-center mt-5 text-white">
+				<div class="col justify-content-center" style="text-justify: auto;">
+					<div class="fs-3 mb-3 fw-bold">DES EXPERTS DU JEU VIDEO ET DE LA VENTE EN LIGNE AU SERVICE DES GAMERS !</div>
+					<div class="text-center fs-5">
+						Nous vous proposons dans notre boutique en ligne GalaxyGames, un
+						<strong>large choix de Jeux Vidéo "Premium 
+												et Budget" pour toutes vos consoles, des Nouveautés et des Oldies, des éditions standard ou des 
+												Collectors exclusifs. Et même un large choix de Bandes Originales de vos jeux préférés sur Vinyles</strong>, 
+												autant pour les mélomanes qui souhaitent prolonger une "ambiance musicale gaming" une fois la manette 
+												posée, que pour les fans et collectionneurs d'une des plus belles gammes d'objets dérivés des univers jeux 
+												vidéo et pop-culture. Pour les adeptes de Rétrogaming ou de "l'Arcade à la Maison" vous trouverez également
+						<strong>une large sélection de jeux Rétro & Néo-Rétro, Consoles Légendaires "Mini", Borne d'Arcade, Flipper 
+												connecté ou Accessoires Gaming divers</strong>
+						qui vous rappelleront les très bons souvenirs vidéoludique de votre 
+											jeunesse et de l'âge d'or du jeu vidéo !
+					</div>
+				</div>
+			</div>
+		</div>
+
+		<script>
+			function showDivInfo(divId) {
+var divs = document.getElementsByClassName('info');
+var btn = document.getElementsByClassName('btn_info');
+for (var i = 0; i < divs.length; i++) {
+if (divs[i].id === divId) {
+divs[i].classList.add('d-flex');
+divs[i].classList.remove('d-none');
+} else {
+divs[i].classList.add('d-none');
+divs[i].classList.remove('d-flex');
+}
+}
+for (var i = 0; i < btn.length; i++) {
+if (btn[i].id === divId + "b") {
+btn[i].classList.add('border-white');
+btn[i].classList.remove('border-info');
+} else {
+btn[i].classList.add('border-info');
+btn[i].classList.remove('border-white');
+}
+}
+}
+		</script>
+
+	</div>
+
+
+{% endblock %}
+

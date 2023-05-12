@@ -1,0 +1,78 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}{{parent()}}profil{% endblock %}
+
+{% block body %}
+    <h1 class="text-center text-info mt-4 pt-4 display-1 fw-bold"> Profil</h1>
+
+    <div class="row justify-content-center">
+		<div class="col-12 col-md-8 bg-white p-4 m-0 text-black text-center">
+            
+                <span >Email: {{app.user.email}}</span>
+                <hr class="hr">
+                <span class="mx-3">{% if app.user.nom == null %}Nom: aucun {% else %} Nom: {{app.user.nom}}{% endif %}</span><span class="mx-3">{% if app.user.prenom == null %}Prenom: aucun {% else %} Prenom: {{app.user.prenom}}{% endif %}</span>
+                <hr class="hr">
+                <span>{% if app.user.numTel == null %}Numéro téléphone: aucun {% else %} Numéro téléphone: {{app.user.numTel}}{% endif %}</span>
+                <hr class="hr">
+                <span class="mx-3">{% if app.user.adresse == null %}Adresse: aucune {% else %}Adresse: {{app.user.adresse}}{% endif %}</span><span class="mx-3">{% if app.user.codePostal == null %}Code postal: aucune {% else %}Code postal: {{app.user.codePostal}}{% endif %}</span><span class="mx-3">{% if app.user.ville == null %}Ville: aucune {% else %}Ville: {{app.user.ville}}{% endif %}</span>
+                <hr class="hr">
+                <span>Role: {% if "ROLE_ADMIN" in app.user.roles %}
+                                        <td>Administrateur</td>
+                                    {% elseif "ROLE_MOD" in app.user.roles  %}
+                                        <td>Modérateur</td>
+                                    {% else %}
+                                        <td>utilisateur</td>
+                                    {% endif %}</span>
+                <br>
+                <div class="d-flex justify-content-around">
+                    <a href="{{path('modifprofil')}}" class="btn btn-info border-0 rounded-5 mt-5">Modifier le profil</a><a href="#" class="btn btn-info border-0 rounded-5 mt-5">Modifier le mot de passe</a><a href="#" id="toggleButton" class="btn btn-info border-0 rounded-5 mt-5">Liste des commandes</a>
+                </div>
+                <div class="ma-div row justify-content-center" style="display: none;">
+                    <div class="col-12 col-md-8 bg-white p-4 m-0 text-primary">
+                        <div class="table-responsive">
+                            <table class="table table-hover table align-middle">
+                                <h3 class="text-info mt-4 pt-4 fw-bold">Liste des commandes</h3>
+                                <thead>
+                                    <tr class="fw-bold text-info text-center">
+                                        <th scope="col">Id commande</th>
+                                        <th scope="col">utilisateurs</th>
+                                        <th scope="col">Prix total</th>
+                                        <th scope="col">Date</th>
+                                        <th scope="col"></th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {% for c in app.user.commandes|sort((a, b) => b.date <=> a.date) %}
+                                        <tr class="{{ cycle(['table-primary', 'table-secondary'], loop.index0) }} text-center">
+                                            <td>{{c.id}}</td>
+                                            <td>{{c.date|date("d-m-Y H:i")}}</td>
+                                            <td>{{c.totalPrix}}
+                                                EURO</td>
+                                            <td class="">
+                                                <a href="{{path('infocommande',{'id':c.id})}}">
+                                                    <i class="bi bi-eye-fill"></i>
+                                                </a>
+                                            </td>
+                                        </tr>
+                                    {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script>
+    var toggleButton = document.getElementById("toggleButton");
+    var maDiv = document.querySelector(".ma-div");
+
+    toggleButton.addEventListener("click", function() {
+      if (maDiv.style.display === "none") {
+        maDiv.style.display = "flex";
+      } else {
+        maDiv.style.display = "none";
+      }
+    });
+  </script>
+{% endblock %}

@@ -1,0 +1,24 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}
+	{{parent()}}Mentions légales
+{% endblock %}
+
+{% block body %}
+	<div class="container-fluid mt-5 justify-content-center">
+		<h1 class="text-center text-info mb-5 display-1 fw-bold">CONTACT GALAXYGAMES</h1>
+		<div class="row justify-content-center">
+			<div class="col-4 text-center">
+				<div class="border-bottom mb-4"></div>
+				<p>Bonjour<br>
+					Vous êtes particulier et rencontrez un problème sur votre commande, utilisez ce formulaire pour nous contacter. Vous êtes éditeur de jeux, journaliste, prestataire de service, utilisez également ce formulaire pour nous contacter.<br>
+					Vous souhaitez revendre nos produits ? Contactez-nous également via le formulaire en nous donnant des précisions sur votre activité pour recevoir nos conditions revendeurs et commander directement via le site.<br>
+					Vous pouvez nous contacter à l'adresse : customer@galaxygames.com. Nous vous répondrons dans les meilleurs délais.<br>
+					GalaxyGames - 9/11 avenue Michelet - 93400 Saint Ouen France</p>
+				{{form(form)}}
+				</div>
+			</div>
+		</div>
+	</div>
+{% endblock %}
+

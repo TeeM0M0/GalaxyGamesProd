@@ -1,0 +1,111 @@
+{% extends 'base.html.twig' %}
+
+
+{% block title %}Catalogue des meilleurs vente de jeux Nintendo
+{% endblock %}
+
+{% block body %}
+
+<!-- cataloque play best_vente -->
+
+	<div class="d-flex mt-5 m-3 ms-md-5 p-md-5"><hr class="mt-4 opacity-100 me-2 border-info" style="width:40px; border-top-width: 3px;"><h1 class="fw-bold">
+			Catalogue des meilleurs vente de jeux Nintendo :</h1>
+	</div>
+	{% set articlesPlusVendus = articles
+		|filter(a => a.qteVendu >= 100 and "Nintendo" in a.platforme.platforme)
+		|sort((a, b) => b.qteVendu - a.qteVendu) %}
+	<div class="d-flex mt-5">
+			<div class="row mx-auto ">
+				{% for a in articlesPlusVendus %}
+					{% set interval = date(a.dateSortie).diff(date(date)) %}
+					{% set leftDays = interval.days %}
+					{% if leftDays < 31 and date > a.dateSortie %}
+						<div class="col p-0 mx-md-4">
+							<a class="text-decoration-none text-secondary" href="{{path('article',{'id':a.id})}}">
+								<div class="container d-flex text-center p-0"style="width:320px; height:552px;">
+
+									<div class="card border-0 rounded-0 mx-0" style="width:320px; height:552px;">
+										<div class="item">
+											{% set url = 'images/articles/'~a.imageArticles[0].nom %}
+											<span class="notify-badge-new">Nouveauté</span>
+											<img src="{{asset(url)}}" class="img-fluid" style="width:auto; height:323px;"></div>
+										<div>
+											<h3 class="text-uppercase text-center" style="width:auto; height:67.19px;">{{a.libelle}}</h3>
+										</div>
+										<div>
+											<span>{{a.prix}}
+												EURO</span>
+										</div>
+										<div>
+											<span>
+												<a href="{{path('modifpanier',{'id':a.id,'action':'ajouter','page':'cataloguePCn'})}}" class="btn btn-info border-0 rounded-5 mt-2">Acheter</a>
+											</span>
+										</div>
+										<hr class="opacity-100 me-2 border-info" style=" border-top-width: 3px; ">
+									</div>
+								</div>
+							</a>
+						</div>
+					{% elseif date|date('U') <  a.dateSortie|date('U') %}
+						<div class="col p-0 mx-md-4">
+							<a class="text-decoration-none text-secondary" href="{{path('article',{'id':a.id})}}">
+								<div class="container d-flex text-center p-0"style="width:320px; height:552px;">
+
+									<div class="card border-0 rounded-0 mx-0" style="width:320px; height:552px;">
+										<div class="item">
+											{% set url = 'images/articles/'~a.imageArticles[0].nom %}
+											<span class="notify-badge-preco">Pré-commande</span>
+											<img src="{{asset(url)}}" class="img-fluid" style="width:auto; height:323px;"></div>
+										<div>
+											<h3 class="text-uppercase text-center" style="width:auto; height:67.19px;">{{a.libelle}}</h3>
+										</div>
+										<div>
+											<span>{{a.prix}}
+												EURO</span>
+										</div>
+										<div>
+											<span>
+												<a href="{{path('modifpanier',{'id':a.id,'action':'ajouter','page':'cataloguePCn'})}}" class="btn btn-info border-0 rounded-5 mt-2">Acheter</a>
+											</span>
+										</div>
+										<hr class="opacity-100 me-2 border-info" style=" border-top-width: 3px; ">
+									</div>
+								</div>
+							</a>
+						</div>
+					{% else %}
+						<div class="col p-0 mx-md-4">
+							<a class="text-decoration-none text-secondary" href="{{path('article',{'id':a.id})}}">
+								<div class="container d-flex text-center p-0"style="width:320px; height:552px;">
+
+									<div class="card border-0 rounded-0 mx-0" style="width:320px; height:552px;">
+										<div class="item">
+											{% set url = 'images/articles/'~a.imageArticles[0].nom %}
+											<img src="{{asset(url)}}" class="img-fluid" style="width:auto; height:323px;"></div>
+										<div>
+											<h3 class="text-uppercase text-center" style="width:auto; height:67.19px;">{{a.libelle}}</h3>
+										</div>
+										<div>
+											<span>{{a.prix}}
+												EURO</span>
+										</div>
+										<div>
+											<span>
+												<a href="{{path('modifpanier',{'id':a.id,'action':'ajouter','page':'cataloguePCn'})}}" class="btn btn-info border-0 rounded-5 mt-2">Acheter</a>
+											</span>
+										</div>
+										<hr class="opacity-100 me-2 border-info" style=" border-top-width: 3px; ">
+									</div>
+								</div>
+							</a>
+						</div>
+					{% endif %}
+				{% endfor %}
+			</div>
+		</div>
+
+
+
+
+{% endblock %}
+
