@@ -32,6 +32,15 @@ class PanierController extends AbstractController
         ]);
     }
 
+    #[Route('/profile-panier-vide', name: 'paniervide')]
+    public function paniervide(EntityManagerInterface $entityManagerInterface,Request $request): Response
+    {
+        $this->addFlash('notice', 'Erreur : panier vide');
+        return $this->render('panier/index.html.twig', [
+            
+        ]);
+    }
+
     #[Route('/profile-modif-panier', name: 'modifpanier')]
     public function modif_panier(EntityManagerInterface $entityManagerInterface,Request $request): Response
     {
@@ -123,7 +132,6 @@ class PanierController extends AbstractController
             $infoCommande = new InfoCommande();
             $infoCommande->setCommande($idcommande);
             $form = $this->createForm(Commande1Type::class, $infoCommande);
-            
             $form->handleRequest($request);
             if ($form->isSubmitted() && $form->isValid()) {
                 foreach($panier->getAjouters() as $ajout){
