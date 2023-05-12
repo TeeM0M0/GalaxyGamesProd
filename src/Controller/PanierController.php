@@ -47,19 +47,14 @@ class PanierController extends AbstractController
         $id = $request->get('id');
         $page = $request->get('page');
         $action = $request->get('action');
-        $panier = $entityManagerInterface->getRepository(Panier::class)->find($this->getUser()->getPanier());
-        $produits = $panier->getAjouters();
         $ajouter = $entityManagerInterface->getRepository(Ajouter::class)->find($id);
         $article = $entityManagerInterface->getRepository(Articles::class)->find($id);
-        $existeAjouter = $entityManagerInterface->getRepository(Ajouter::class)->findOneBy([
-            'panier' => $panier,
-            'article' => $article
-        ]);;
         if ($action == 'ajouter') {
             if ($this->getUser()->getPanier() == null) {
                 $this->getUser()->setPanier(new Panier());
                 $entityManagerInterface->persist($this->getUser());
                 $entityManagerInterface->flush();
+                $panier = $entityManagerInterface->getRepository(Panier::class)->find($this->getUser()->getPanier());
                 $new_ajout = new Ajouter;
                 $new_ajout->setPanier($panier);
                 $new_ajout->setQte(1);
@@ -67,12 +62,20 @@ class PanierController extends AbstractController
                 $article->setQteStock($article->getQteStock()-1);
                 $entityManagerInterface->persist($new_ajout);
                 $entityManagerInterface->persist($article);
-            } else if ($existeAjouter){
-                $existeAjouter->setQte($existeAjouter->getQte()+1);
-                $article->setQteStock($article->getQteStock()-1);
-                $entityManagerInterface->persist($article);
-                $entityManagerInterface->persist($existeAjouter);
+            } else if ($this->getUser()->getPanier() != null){
+                $panier = $entityManagerInterface->getRepository(Panier::class)->find($this->getUser()->getPanier());
+                $existeAjouter = $entityManagerInterface->getRepository(Ajouter::class)->findOneBy([
+                    'panier' => $panier,
+                    'article' => $article
+                ]);;
+                if ($existeAjouter) {
+                    $existeAjouter->setQte($existeAjouter->getQte()+1);
+                    $article->setQteStock($article->getQteStock()-1);
+                    $entityManagerInterface->persist($article);
+                    $entityManagerInterface->persist($existeAjouter);
+                }
             } else {
+                $panier = $entityManagerInterface->getRepository(Panier::class)->find($this->getUser()->getPanier());
                 $new_ajout = new Ajouter;
                 $new_ajout->setPanier($panier);
                 $new_ajout->setQte(1);
@@ -83,6 +86,7 @@ class PanierController extends AbstractController
             }
         }
         if ($action == 'supprimer') {
+            $panier = $entityManagerInterface->getRepository(Panier::class)->find($this->getUser()->getPanier());
             $ajouter->getArticle()->setQteStock($ajouter->getArticle()->getQteStock()+$ajouter->getQte());
             $panier->removeAjouter($ajouter);
             $entityManagerInterface->persist($panier);
@@ -98,6 +102,7 @@ class PanierController extends AbstractController
                 $ajouter->getArticle()->setQteStock($ajouter->getArticle()->getQteStock()+1);
             }
             if ($ajouter->getQte()==0) {
+                $panier = $entityManagerInterface->getRepository(Panier::class)->find($this->getUser()->getPanier());
                 $ajouter->getArticle()->setQteStock($ajouter->getArticle()->getQteStock()+1);
                 $panier->removeAjouter($ajouter);
                 $entityManagerInterface->persist($panier);
@@ -105,6 +110,7 @@ class PanierController extends AbstractController
             $entityManagerInterface->persist($ajouter);
         }
         if ($action == 'removePanier') {
+            $panier = $entityManagerInterface->getRepository(Panier::class)->find($this->getUser()->getPanier());
             foreach($panier->getAjouters() as $ajout){
                 $ajout->getArticle()->setQteStock($ajout->getArticle()->getQteStock()+$ajout->getQte());
                 $panier->removeAjouter($ajout);
