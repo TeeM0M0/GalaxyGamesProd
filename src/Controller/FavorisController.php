@@ -12,7 +12,7 @@ use App\Entity\Articles;
 
 class FavorisController extends AbstractController
 {
-    #[Route('/private-liste-favoris', name: 'listfav')]
+    #[Route('/profile-liste-favoris', name: 'listfav')]
     public function listfav(): Response
     {
         return $this->render('favoris/index.html.twig', [
@@ -20,7 +20,7 @@ class FavorisController extends AbstractController
         ]);
     }
 
-    #[Route('/private-favoris', name: 'favoris')]
+    #[Route('/profile-favoris', name: 'favoris')]
     public function favoris(EntityManagerInterface $entityManagerInterface,Request $request): Response
     {
         $id = $request->get('id');

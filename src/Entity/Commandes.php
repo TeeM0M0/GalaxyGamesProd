@@ -55,14 +55,14 @@ class Commandes
     }
 
     /**
-     * @return Collection<int, AjoutCommande>
+     * @return Collection<int, AjoutCommandes>
      */
     public function getAjoutCommandes(): Collection
     {
         return $this->ajoutCommandes;
     }
 
-    public function addAjoutCommande(AjoutCommande $ajoutCommande): self
+    public function addAjoutCommande(AjoutCommandes $ajoutCommande): self
     {
         if (!$this->ajoutCommandes->contains($ajoutCommande)) {
             $this->ajoutCommandes->add($ajoutCommande);
@@ -72,7 +72,7 @@ class Commandes
         return $this;
     }
 
-    public function removeAjoutCommande(AjoutCommande $ajoutCommande): self
+    public function removeAjoutCommande(AjoutCommandes $ajoutCommande): self
     {
         if ($this->ajoutCommandes->removeElement($ajoutCommande)) {
             // set the owning side to null (unless already changed)
