@@ -77,10 +77,8 @@
 
 		<div id="nouveau" class="d-flex mt-5 choix">
 			<div class="row mx-auto ">
-				{% for a in articles|slice(0, 5) %}
-					{% set interval = date(a.dateSortie).diff(date(date)) %}
-					{% set leftDays = interval.days %}
-					{% if leftDays < 31 and date > a.dateSortie %}
+				{% set new = articles|filter(a => (date(a.dateSortie).diff(date(date))).days < 31 and date > a.dateSortie) %}
+				{% for a in new|slice(0,5) %}
 						<div class="col p-0 mx-md-4">
 							<a class="text-decoration-none text-secondary" href="{{path('article',{'id':a.id})}}">
 								<div class="container d-flex text-center p-0"style="width:320px; height:552px;">
@@ -107,15 +105,14 @@
 								</div>
 							</a>
 						</div>
-					{% endif %}
 				{% endfor %}
 			</div>
 		</div>
 
 		<div id="precommande" class="d-none mt-5 choix">
+			{% set rpeco = articles|filter(a => date|date('U') <  a.dateSortie|date('U')) %}
 			<div class="row mx-auto ">
-				{% for a in articles|slice(0, 5) %}
-					{% if date|date('U') <  a.dateSortie|date('U') %}
+				{% for a in rpeco|slice(0,5) %}
 						<div class="col p-0 mx-md-4">
 							<a class="text-decoration-none text-secondary" href="{{path('article',{'id':a.id})}}">
 								<div class="container d-flex text-center p-0"style="width:320px; height:552px;">
@@ -142,7 +139,6 @@
 								</div>
 							</a>
 						</div>
-					{% endif %}
 				{% endfor %}
 			</div>
 		</div>

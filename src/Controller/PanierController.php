@@ -62,7 +62,7 @@ class PanierController extends AbstractController
                 $article->setQteStock($article->getQteStock()-1);
                 $entityManagerInterface->persist($new_ajout);
                 $entityManagerInterface->persist($article);
-            } else if ($this->getUser()->getPanier() != null){
+            } else{
                 $panier = $entityManagerInterface->getRepository(Panier::class)->find($this->getUser()->getPanier());
                 $existeAjouter = $entityManagerInterface->getRepository(Ajouter::class)->findOneBy([
                     'panier' => $panier,
@@ -73,16 +73,16 @@ class PanierController extends AbstractController
                     $article->setQteStock($article->getQteStock()-1);
                     $entityManagerInterface->persist($article);
                     $entityManagerInterface->persist($existeAjouter);
+                }else {
+                    $panier = $entityManagerInterface->getRepository(Panier::class)->find($this->getUser()->getPanier());
+                    $new_ajout = new Ajouter;
+                    $new_ajout->setPanier($panier);
+                    $new_ajout->setQte(1);
+                    $new_ajout->setArticle($article);
+                    $article->setQteStock($article->getQteStock()-1);
+                    $entityManagerInterface->persist($article);
+                    $entityManagerInterface->persist($new_ajout);
                 }
-            } else {
-                $panier = $entityManagerInterface->getRepository(Panier::class)->find($this->getUser()->getPanier());
-                $new_ajout = new Ajouter;
-                $new_ajout->setPanier($panier);
-                $new_ajout->setQte(1);
-                $new_ajout->setArticle($article);
-                $article->setQteStock($article->getQteStock()-1);
-                $entityManagerInterface->persist($article);
-                $entityManagerInterface->persist($new_ajout);
             }
         }
         if ($action == 'supprimer') {
